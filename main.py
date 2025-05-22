@@ -138,7 +138,7 @@ window = display.set_mode((700, 500))
 display.set_caption("Pixel Pong")
 background = transform.scale(image.load(resource_path("images/background2.png")), (700, 500))
 player1 = Player1("images/player1.png", 2, 250, 3)
-player2 = Player2("images/player2.png", 660, 250, 3)
+player2 = Player2("images/player2.png", 655, 250, 3)
 ball = Ball("images/ball.png", 350, 250, 4)
 letter_pingPong = MessageSprite("images/ping_pong.png", 160, 80)
 button_pp = Button("images/button_play_player.png", 220, 200)
@@ -167,6 +167,9 @@ images_score_right = [transform.scale(image.load(resource_path("images/number_0.
 
 score_left = 0
 score_right = 0
+
+just_bounced = False
+bounce_timer = 0
 
 clock = time.Clock()
 fps = 60
@@ -198,7 +201,7 @@ while game:
             score_left = 0
             score_right = 0
             player1.move(2, 250)
-            player2.move(678, 250)
+            player2.move(655, 250)
             ball.move(350, 250)
             state = 4
             state_timer = 0
@@ -225,8 +228,15 @@ while game:
         ball.reset()
 
 
-        if ball.colliding_with(player1) or ball.colliding_with(player2):
+        if (ball.colliding_with(player1) or ball.colliding_with(player2)) and not just_bounced:
+            just_bounced = True
+            bounce_timer = 0
             ball.reverse()
+
+        bounce_timer += 1
+
+        if bounce_timer == 20:
+            just_bounced = False
 
         if ball.rect.x > 700:
             score_left += 1
@@ -273,11 +283,11 @@ while game:
             x, y = e.pos
             if button_pp.button_click(x, y) and state == 0:
                 player1 = Player1("images/player1.png", 2, 250, 3)
-                player2 = Player2("images/player2.png", 678, 250, 3)
+                player2 = Player2("images/player2.png", 655, 250, 3)
                 state = 1
             if button_pc.button_click(x, y) and state == 0:
                 player1 = Player1("images/player1.png", 2, 250, 3)
-                player2 = AI("images/player2.png", 678, 250, 3)
+                player2 = AI("images/player2.png", 655, 250, 3)
                 state = 1
 
             if back.button_click(x, y) and state == 2 or back.button_click(x, y) and state == 3:
