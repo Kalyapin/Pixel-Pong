@@ -1,10 +1,12 @@
 from pygame import *
+import os
+import sys
 
 
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, player_speed):
         super().__init__()
-        self.image = transform.scale(image.load(player_image), (40, 150))
+        self.image = transform.scale(image.load(resource_path(player_image)), (40, 150))
         self.speed = player_speed
         self.rect = self.image.get_rect()
         self.rect.x = player_x
@@ -54,7 +56,7 @@ class AI(GameSprite):
 class Ball(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, player_speed):
         super().__init__()
-        self.image = transform.scale(image.load(player_image), (20, 20))
+        self.image = transform.scale(image.load(resource_path(player_image)), (20, 20))
         self.speedx = player_speed
         self.speedy = player_speed
         self.rect = self.image.get_rect()
@@ -85,7 +87,7 @@ class Ball(sprite.Sprite):
 class MessageSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y):
         super().__init__()
-        self.image = transform.scale(image.load(player_image), (350, 150))
+        self.image = transform.scale(image.load(resource_path(player_image)), (350, 150))
         self.rect = self.image.get_rect()
         self.rect.x = player_x
         self.rect.y = player_y
@@ -96,7 +98,7 @@ class MessageSprite(sprite.Sprite):
 class ScoreNumber(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y):
         super().__init__()
-        self.image = transform.scale(image.load(player_image), (115, 150))
+        self.image = transform.scale(image.load(resource_path(player_image)), (115, 150))
         self.rect = self.image.get_rect()
         self.rect.x = player_x
         self.rect.y = player_y
@@ -107,7 +109,7 @@ class ScoreNumber(sprite.Sprite):
 class Button(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y):
         super().__init__()
-        self.image = transform.scale(image.load(player_image), (250, 200))
+        self.image = transform.scale(image.load(resource_path(player_image)), (250, 200))
         self.rect = self.image.get_rect()
         self.rect.x = player_x
         self.rect.y = player_y
@@ -121,11 +123,22 @@ class Button(sprite.Sprite):
         return False
 
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 window = display.set_mode((700, 500))
 display.set_caption("Pixel Pong")
-background = transform.scale(image.load("images/background2.png"), (700, 500))
+background = transform.scale(image.load(resource_path("images/background2.png")), (700, 500))
 player1 = Player1("images/player1.png", 2, 250, 3)
-player2 = Player2("images/player2.png", 678, 250, 3)
+player2 = Player2("images/player2.png", 660, 250, 3)
 ball = Ball("images/ball.png", 350, 250, 4)
 letter_pingPong = MessageSprite("images/ping_pong.png", 160, 80)
 button_pp = Button("images/button_play_player.png", 220, 200)
@@ -137,19 +150,20 @@ player2_win = MessageSprite("images/winner_player2.png", 160, 80)
 
 symbol = ScoreNumber("images/symbol_-.png", 300, 200)
 
-images_score_left = [transform.scale(image.load("images/number_0.png"), (115, 150)),
-                     transform.scale(image.load("images/number_1.png"), (115, 150)),
-                     transform.scale(image.load("images/number_2.png"), (115, 150)),
-                     transform.scale(image.load("images/number_3.png"), (115, 150)),
-                     transform.scale(image.load("images/number_4.png"), (115, 150)),
-                     transform.scale(image.load("images/number_5.png"), (115, 150))]
+images_score_left = [transform.scale(image.load(resource_path("images/number_0.png")), (115, 150)),
+                     transform.scale(image.load(resource_path("images/number_1.png")), (115, 150)),
+                     transform.scale(image.load(resource_path("images/number_2.png")), (115, 150)),
+                     transform.scale(image.load(resource_path("images/number_3.png")), (115, 150)),
+                     transform.scale(image.load(resource_path("images/number_4.png")), (115, 150)),
+                     transform.scale(image.load(resource_path("images/number_5.png")), (115, 150))]
 
-images_score_right = [transform.scale(image.load("images/number_0.png"), (115, 150)),
-                     transform.scale(image.load("images/number_1.png"), (115, 150)),
-                     transform.scale(image.load("images/number_2.png"), (115, 150)),
-                     transform.scale(image.load("images/number_3.png"), (115, 150)),
-                     transform.scale(image.load("images/number_4.png"), (115, 150)),
-                     transform.scale(image.load("images/number_5.png"), (115, 150))]
+images_score_right = [transform.scale(image.load(resource_path("images/number_0.png")), (115, 150)),
+                     transform.scale(image.load(resource_path("images/number_1.png")), (115, 150)),
+                     transform.scale(image.load(resource_path("images/number_2.png")), (115, 150)),
+                     transform.scale(image.load(resource_path("images/number_3.png")), (115, 150)),
+                     transform.scale(image.load(resource_path("images/number_4.png")), (115, 150)),
+                     transform.scale(image.load(resource_path("images/number_5.png")), (115, 150))]
+
 
 score_left = 0
 score_right = 0
